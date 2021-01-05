@@ -68,7 +68,8 @@ def render_apps(i3):
     apps = tree.leaves()
     apps.sort(key=lambda app: app.workspace().name)
 
-    out = '%{O12}'.join(format_entry(app) for app in apps)
+    out = 'No apps open' if not apps else '%{O12}'.join(
+        format_entry(app) for app in apps)
 
     print(out, flush=True)
 
