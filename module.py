@@ -10,7 +10,7 @@ from time import sleep
 from icon_resolver import IconResolver
 
 #: Max length of single window title
-MAX_LENGTH = 26
+MAX_LENGTH = 25
 #: Base 1 index of the font that should be used for icons
 ICON_FONT = 3
 
@@ -18,23 +18,23 @@ HOSTNAME = platform.node()
 USER = getpass.getuser()
 
 ICONS = [
-    ('class=*.slack.com', '\uf3ef'),
+    ('class=*.slack.com', '\uf3ef '),
 
-    ('class=Chromium', '\ue743'),
-    ('class=Firefox', '\uf738'),
-    ('class=URxvt', '\ue795'),
-    ('class=Code', '\ue70c'),
-    ('class=code-oss-dev', '\ue70c'),
+    ('class=Google-chrome', '\ue743 '),
+    ('class=Firefox', '\uf738 '),
+    ('class=URxvt', '\ue795 '),
+    ('class=Code', '\ue70c '),
+    ('class=code-oss-dev', '\ue70c '),
 
-    ('name=mutt', '\uf199'),
+    ('name=mutt', '\uf199 '),
 
-    ('*', '\ufaae'),
+    ('*', '\ufaae '),
 ]
 
 FORMATERS = {
-    'Chromium': lambda title: title.replace(' - Chromium', ''),
-    'Firefox': lambda title: title.replace(' - Mozilla Firefox', ''),
+    'Google-chrome': lambda title: title.replace(' - Google Chrome', ''),
     'URxvt': lambda title: title.replace('%s@%s: ' % (USER, HOSTNAME), ''),
+    'qutebrowser': lambda title: title.replace(' - qutebrowser', '')
 }
 
 SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
@@ -75,8 +75,8 @@ def render_apps(i3):
 
 def format_entry(app):
     title = make_title(app)
-    u_color = '#b4619a' if app.focused else\
-        '#e84f4f' if app.urgent else\
+    u_color = '#b4619a' if app.focused else \
+        '#e84f4f' if app.urgent else \
         '#404040'
 
     return '%%{u%s} %s %%{u-}' % (u_color, title)
@@ -85,8 +85,9 @@ def format_entry(app):
 def make_title(app):
     out = get_prefix(app) + format_title(app)
 
-    if app.focused:
-        out = '%{F#fff}' + out + '%{F-}'
+    out = '%{F#fff}' + out + '%{F-}' if app.focused else\
+        '%{F#edb26b}' + out + '%{F-}' if app.urgent else\
+        '%{F#888}' + out + '%{F-}'
 
     return '%%{A1:%s %s:}%s%%{A-}' % (COMMAND_PATH, app.id, out)
 
@@ -110,5 +111,6 @@ def format_title(app):
         title = title[:MAX_LENGTH - 3] + '...'
 
     return title
+
 
 main()
